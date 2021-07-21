@@ -1,8 +1,8 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import makeCancellablePromise from 'make-cancellable-promise';
 //import ReactDataGrid from 'react-data-grid';
 //import { useTable } from "react-table";
-const cloneDeep = require('lodash/clonedeep');
+
 import './../App.css';
 
 const Collection = (props) => {
@@ -26,6 +26,7 @@ const Collection = (props) => {
 
 
     const getData = (uri) => {
+        console.log("getData => ", uri);
         return (fetch(uri,{
             method: 'GET',
             accept: 'application/json',
@@ -34,50 +35,50 @@ const Collection = (props) => {
         }))
     }
 
-    function useFetch(uri) {
-        console.log("useFetch is starting", uri);
+    function useFetch(uri="http://localhost:8000/datapackages") {
 
-        const [data, setData] = useState(''); 
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(false);
+        console.log("useFetch is starting", uri);
+    
+        let [data, setData] = useState(''); 
+        let [loading, setLoading] = useState(true);
+        let [error, setError] = useState(false);
 
         useEffect(() => {
+ //           let isMounted = useRef(true);
             console.log("useEffect is starting", uri);
             const {promise, cancel} = makeCancellablePromise(getData(uri));
             promise
                 .then((d) => d.json())
                 .then(d => {
                     setData(d);
-                    setLoading(false)
+                    setLoading(false)                        
                 })
                 .catch((error) => {
                     console.log("Error while fetching catalog list: ", error);
-                    setError(true);                        
+                    setError(true);                     
                 })
                 
                 return (() => {
                     console.log("cleanup");
-                    setLoading(true);
+                    isMounted.current = false;
                     cancel();
                 });
-        }, [uri]); 
+        }, []); 
     
        const result = { loading, data, error };
 
         return result;
     }
 
+ 
+
+ 
     const uri = "http://localhost:8000/datapackages"
     const { loading, data, error } = useFetch(uri);
-
     if (loading===true) return <h1>loading ...</h1>;
     if (error===true) return <pre>Error: {data}</pre>;
     let Data = JSON.stringify(data);
- 
     console.log(Data);
-
-
-
     return(
       <div>
           <pre>{Data}</pre>
