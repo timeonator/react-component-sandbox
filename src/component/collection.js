@@ -72,16 +72,15 @@ const Collection = (props) => {
 
     if (loading===true) return <h1>loading ...</h1>;
     if (error===true) return <pre>Error: {data}</pre>;
-    let deepData = cloneDeep(JSON.stringify(data));
-    // var deepData = cloneDeep(data);
-
-    console.log(deepData);
+    let Data = JSON.stringify(data);
+ 
+    console.log(Data);
 
 
 
     return(
       <div>
-          <pre>{deepData}</pre>
+          <pre>{Data}</pre>
       </div>
   );
 }
