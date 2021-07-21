@@ -1,4 +1,5 @@
 import React, {useState, useEffect } from 'react';
+import makeCancellablePromise from 'make-cancellable-promise';
 //import ReactDataGrid from 'react-data-grid';
 //import { useTable } from "react-table";
 const cloneDeep = require('lodash/clonedeep');
@@ -23,28 +24,27 @@ const Collection = (props) => {
     //     []
     //   )
 
-    function useFetch(uri) {
-        let cancel = false;
-        console.log("useFetch is starting");
 
-        const [data, setData] = useState([]); 
+    const getData = (uri) => {
+        return (fetch(uri,{
+            method: 'GET',
+            accept: 'application/json',
+            mode: 'cors',
+            cache: 'default',
+        }))
+    }
+
+    function useFetch(uri) {
+        console.log("useFetch is starting", uri);
+
+        const [data, setData] = useState(''); 
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(false);
 
         useEffect(() => {
-            let cancel = false;
-            if (!uri) return;
-            console.log("useEffect is starting");
-            fetch(uri,{
-                method: 'GET',
-                accept: 'application/json',
-                mode: 'cors',
-                cache: 'default',
-            })
-                .then((res) => {
-                    if(cancel==true) return;
-                    else return(res)
-                })
+            console.log("useEffect is starting", uri);
+            const {promise, cancel} = makeCancellablePromise(getData(uri));
+            promise
                 .then((d) => d.json())
                 .then(d => {
                     setData(d);
@@ -57,7 +57,8 @@ const Collection = (props) => {
                 
                 return (() => {
                     console.log("cleanup");
-                    cancel = true;
+                    setLoading(true);
+                    cancel();
                 });
         }, [uri]); 
     
@@ -65,8 +66,6 @@ const Collection = (props) => {
 
         return result;
     }
-
-
 
     const uri = "http://localhost:8000/datapackages"
     const { loading, data, error } = useFetch(uri);
