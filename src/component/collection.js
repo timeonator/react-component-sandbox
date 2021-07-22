@@ -1,28 +1,28 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect } from 'react';
 import makeCancellablePromise from 'make-cancellable-promise';
 //import ReactDataGrid from 'react-data-grid';
-//import { useTable } from "react-table";
+// import { useTable } from "react-table";
 
 import './../App.css';
 
 const Collection = (props) => {
-    // const columns = React.useMemo(
-    //     () => [
-    //       {
-    //         Header: 'ID',
-    //         accessor: '_id', 
-    //       },
-    //       {
-    //         Header: 'Name',
-    //         accessor: 'name',
-    //       },
-    //       {
-    //         Header: 'Title',
-    //         accessor: 'title',
-    //       },
-    //     ],
-    //     []
-    //   )
+    const columns = React.useMemo(
+        () => [
+          {
+            Header: 'ID',
+            accessor: '_id', 
+          },
+          {
+            Header: 'Name',
+            accessor: 'name',
+          },
+          {
+            Header: 'Title',
+            accessor: 'title',
+          },
+        ],
+        []
+      );
 
 
     const getData = (uri) => {
@@ -44,7 +44,6 @@ const Collection = (props) => {
         let [error, setError] = useState(false);
 
         useEffect(() => {
- //           let isMounted = useRef(true);
             console.log("useEffect is starting", uri);
             const {promise, cancel} = makeCancellablePromise(getData(uri));
             promise
@@ -60,7 +59,6 @@ const Collection = (props) => {
                 
                 return (() => {
                     console.log("cleanup");
-                    isMounted.current = false;
                     cancel();
                 });
         }, []); 
@@ -78,11 +76,23 @@ const Collection = (props) => {
     if (loading===true) return <h1>loading ...</h1>;
     if (error===true) return <pre>Error: {data}</pre>;
     let Data = JSON.stringify(data);
-    console.log(Data);
+
+    
+    const mData=Data;
+
+
+    // const {
+    //     getTableProps,
+    //     getTableBodyProps,
+    //     headerGroups,
+    //     rows,
+    //     prepareRow,
+    //   } =  useTable({ columns, mData })
     return(
-      <div>
-          <pre>{Data}</pre>
-      </div>
-  );
+      <>
+        <h4>Data</h4>
+        <pre>{mData}</pre>
+      </>
+    )
 }
 export default Collection

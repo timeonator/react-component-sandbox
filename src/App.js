@@ -7,11 +7,8 @@ import './App.css';
 const App = () => {
     return (
         <React.StrictMode >
-            <div className="App">
-                <ErrorBoundry>
-                    <Collection/>                    
-                </ErrorBoundry>
-
+            <div className="App"> 
+                <Collection/>                    
             </div>
         </React.StrictMode>
     );
