@@ -1,5 +1,5 @@
 import React from 'react'
-import Collection from './component/collection'
+import TableData from './component/table-data'
 import ErrorBoundry from './error-boundry';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -8,7 +8,7 @@ const App = () => {
     return (
         <React.StrictMode >
             <div className="App"> 
-                <Collection/>                    
+                <TableData/>                    
             </div>
         </React.StrictMode>
     );
