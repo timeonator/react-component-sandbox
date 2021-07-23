@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react';
 import makeCancellablePromise from 'make-cancellable-promise';
-//import ReactDataGrid from 'react-data-grid';
-// import { useTable } from "react-table";
+// import ReactDataGrid from 'react-data-grid';
+import { useTable } from "react-table";
 
 import './../App.css';
 
@@ -79,19 +79,35 @@ const Collection = (props) => {
 
     
     const mData=Data;
+    // [
+    //     {
+    //     '_id': '60d125fdc221cb2458525a3a',
+    //     'name': 'judydata.json',
+    //     'title': "Judy's Data Set",
+    //     },
+    // ];
 
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     rows,
-    //     prepareRow,
-    //   } =  useTable({ columns, mData })
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+      } =  useTable({
+           columns, 
+            Data
+        }
+    )
     return(
       <>
         <h4>Data</h4>
         <pre>{mData}</pre>
+
+        {/* <ReactDataGrid
+        columns={columns}
+        rowGetter={i => rows[i]}
+        rowsCount={1}
+        minHeight={150} /> */}
       </>
     )
 }
