@@ -14,22 +14,18 @@ class TableData extends Component {
     constructor(props) {
       super(props);
       this.state= {
-        data: [
-            {
-            _id: "1231091439912",
-            name: "billy",
-            title: "Billy The Kid"
-            }
-        ],
         loading: true,
-        error: false
+        error: false,
+        data: []
       }
+
     }
+
     componentDidMount() {
         const promise = getData('http://localhost:8000/datapackages');
         promise
             .then((d) => d.json())
-            .then(d =>
+            .then(d => 
                 this.setState({
                     loading:false,
                     data:d 
@@ -42,16 +38,31 @@ class TableData extends Component {
                 })                   
             })
     }
+
     render() {
+        console.log("data=>", this.state.data)
         if (this.state.loading == true) return(<h4>"loading"</h4>);
         if (this.state.error == true) return (<h4>"Error fetching data"</h4>)
-    return(
-        <>
-            <h1> Data </h1>
-            <p> {this.state.data[0].title} </p> 
-        </>
- 
-    )
-    }
+        let rows = [];
+        for (const [index, value] of this.state.data.entries()) {
+            console.log("index,value =>", index, value)
+            rows.push(
+            <tr key={index}>
+                <td>{value._id}</td>
+                <td>{value.name}</td>
+                <td>{value.title}</td>
+            </tr>)
+          }
+          console.log("rows=>", rows)
+         return(
+           <>
+                <h1> Data </h1>
+                <table>
+                    <tbody>
+                        {rows}                    
+                    </tbody>
+                </table>
+            </> 
+    );}
   }
   export default TableData;
